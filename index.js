@@ -10,7 +10,8 @@ const STORE = {
     {id: cuid(), name: 'milk', checked: true},
     {id: cuid(), name: 'bread', checked: false}
   ],
-  hideCompleted: false
+  hideCompleted: false,
+  searchItem: null,
 };
 
 function generateItemElement(item) {
@@ -53,6 +54,11 @@ function renderShoppingList() {
   // where ONLY items with a "checked" property of false are included
   if (STORE.hideCompleted) {
     filteredItems = filteredItems.filter(item => !item.checked);
+  }
+
+  if(STORE.searchItem) {
+    filteredItems = filteredItems.filter( item =>  
+      item.name.includes(STORE.searchItem));
   }
 
   // at this point, all filtering work has been done (or not done, if that's the current settings), so
@@ -143,9 +149,20 @@ function handleToggleHideFilter() {
   });
 }
 
+function setSearchItem(val) {
+  STORE.searchItem = val;
+}
+
 // Will accept user text input, then search for corresponding item in STORE,
 // Only show items matching inputed text
-function handleSearchFor() {}
+function handleSearchFor() {
+  $('.js-shopping-list-search').on('keyup', function (event) {
+    const val = $(event.currentTarget).val();
+    console.log(val);
+    setSearchItem(val);
+    renderShoppingList();
+  });
+}
 
 // Will allow editing of existing item names
 function handleEditItem() {}
@@ -160,6 +177,7 @@ function handleShoppingList() {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleHideFilter();
+  handleSearchFor();
 }
 
 // when the page loads, call `handleShoppingList`
