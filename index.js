@@ -87,7 +87,7 @@ function renderShoppingList() {
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding "${itemName}" to shopping list`);
-  STORE.items.push({name: itemName, checked: false});
+  STORE.items.push({id: cuid(), name: itemName, checked: false, isEditing: false});
 }
 
 function handleNewItemSubmit() {
